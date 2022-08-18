@@ -17,6 +17,7 @@ class _MyLogInPageState extends State<MyLogInPage> {
   bool pass = true;
   bool confirmpass = true;
   bool submitted = false;
+  bool isloading = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -74,7 +75,7 @@ class _MyLogInPageState extends State<MyLogInPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                width: 1,
+                                width: 2,
                                 color: Color.fromARGB(157, 9, 237, 176)),
                             borderRadius: BorderRadius.circular(10)),
                         focusedErrorBorder: OutlineInputBorder(
@@ -109,7 +110,7 @@ class _MyLogInPageState extends State<MyLogInPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                width: 1,
+                                width: 2,
                                 color: Color.fromARGB(157, 9, 237, 176)),
                             borderRadius: BorderRadius.circular(10)),
                         focusedErrorBorder: OutlineInputBorder(
@@ -147,6 +148,7 @@ class _MyLogInPageState extends State<MyLogInPage> {
                         final String? username = prefs.getString('UserID');
                         setState(() {
                           submitted = true;
+                          isloading = true;
                           print('$username');
                         });
                         if (_formKey.currentState!.validate()) {
@@ -158,6 +160,10 @@ class _MyLogInPageState extends State<MyLogInPage> {
                                     password: passwordcontroller.text);
                             print(currentUser.user!.uid);
                             if (currentUser.user!.uid != null) {
+                              isloading = false;
+                              // ignore: use_build_context_synchronously
+                              Navigator.popUntil(
+                                      context, ModalRoute.withName('/'));
                               // ignore: use_build_context_synchronously
                               Navigator.pushReplacementNamed(context, '/main');
                               usernamecontroller.clear();
@@ -171,12 +177,18 @@ class _MyLogInPageState extends State<MyLogInPage> {
                             } else {
                               errorMassage = e.code;
                             }
+                            setState(() {
+                              isloading = false;
+                            });
                             // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(errorMassage),
                                 backgroundColor: Colors.red,
                                 duration: const Duration(seconds: 1)));
                           } catch (e) {
+                            setState(() {
+                              isloading = false;
+                            });
                             // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(e.toString()),
@@ -190,18 +202,25 @@ class _MyLogInPageState extends State<MyLogInPage> {
                         padding: const EdgeInsets.only(left: 120, right: 120),
                         elevation: 15,
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          'SignIn',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Libre',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ),
-                      )),
+                      child: isloading
+                          ? const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Text(
+                                'SignIn',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Libre',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            )),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

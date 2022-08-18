@@ -19,6 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool pass = true;
   bool confirmpass = true;
   bool submitted = false;
+  bool isloading = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -70,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
-                              width: 1,
+                              width: 2,
                               color: Color.fromARGB(157, 9, 237, 176)),
                           borderRadius: BorderRadius.circular(10)),
                       focusedErrorBorder: OutlineInputBorder(
@@ -104,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
-                              width: 1,
+                              width: 2,
                               color: Color.fromARGB(157, 9, 237, 176)),
                           borderRadius: BorderRadius.circular(10)),
                       focusedErrorBorder: OutlineInputBorder(
@@ -157,7 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                width: 1,
+                                width: 2,
                                 color: Color.fromARGB(157, 9, 237, 176)),
                             borderRadius: BorderRadius.circular(10)),
                         focusedErrorBorder: OutlineInputBorder(
@@ -192,6 +193,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () async {
                       setState(() {
                         submitted = true;
+                        isloading = true;
                       });
                       if (_formKey.currentState!.validate()) {
                         try {
@@ -207,12 +209,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
                           prefs.setString('UserID', newUser.user!.uid);
                           setState(() {
+                            isloading = false;
                             Navigator.pushNamed(context, '/login');
                             userregistController.clear();
                             passwordregistController.clear();
                           });
                         } catch (e) {
                           print('Error >>>>>>>> $e');
+                          isloading = false;
                         }
                       }
                     },
@@ -221,18 +225,25 @@ class _RegisterPageState extends State<RegisterPage> {
                       padding: const EdgeInsets.only(left: 120, right: 120),
                       elevation: 15,
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        'SignUp',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Libre',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                      ),
-                    )),
+                    child: isloading
+                        ? const Padding(
+                            padding: EdgeInsets.all(10),
+                            child:
+                                CircularProgressIndicator(color: Colors.white,
+                                ),
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              'SignUp',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Libre',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                          )),
                 Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.all(20),
@@ -253,8 +264,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               'Sign In',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                                color: Color.fromARGB(255, 8, 254, 4)),
+                                  fontSize: 15,
+                                  color: Color.fromARGB(255, 8, 254, 4)),
                             ))
                       ],
                     ))

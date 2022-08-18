@@ -1,6 +1,6 @@
 import 'package:chat_app/leadingpage.dart';
 import 'package:chat_app/login.dart';
-import 'package:chat_app/mainScreen.dart';
+import 'package:chat_app/chatScreen.dart';
 import 'package:chat_app/register.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
