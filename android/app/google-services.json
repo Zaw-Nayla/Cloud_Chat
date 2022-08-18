@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "44513432131",
+    "project_id": "pixel13",
+    "storage_bucket": "pixel13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44513432131:android:a48eb9b6c2dfbdee39faf6",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44513432131-ioau66t27bl0tts0e4do0fppevt1nr9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-YdZLQVR5QVdUvCqRriWuImbl5pV3rvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44513432131-ioau66t27bl0tts0e4do0fppevt1nr9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
