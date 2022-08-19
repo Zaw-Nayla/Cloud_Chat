@@ -15,6 +15,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordregistController = TextEditingController();
   TextEditingController confirmpasswordregistController =
       TextEditingController();
+  TextEditingController nameregistController = TextEditingController();
 
   bool pass = true;
   bool confirmpass = true;
@@ -79,6 +80,39 @@ class _RegisterPageState extends State<RegisterPage> {
                               width: 1, color: Colors.redAccent),
                           borderRadius: BorderRadius.circular(10)),
                       hintText: 'Enter Your Email ',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 80,
+                  width: 300,
+                  child: TextFormField(
+                    controller: nameregistController,
+                    autovalidateMode: submitted
+                        ? AutovalidateMode.always
+                        : AutovalidateMode.disabled,
+                    validator: RequiredValidator(errorText: 'Required'),
+                    decoration: InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 1, color: Colors.redAccent),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color.fromARGB(157, 9, 237, 176)),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 2,
+                              color: Color.fromARGB(157, 9, 237, 176)),
+                          borderRadius: BorderRadius.circular(10)),
+                      focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1, color: Colors.redAccent),
+                          borderRadius: BorderRadius.circular(10)),
+                      hintText: 'Enter name (how you like to be called) ',
                     ),
                   ),
                 ),
@@ -193,9 +227,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () async {
                       setState(() {
                         submitted = true;
-                        isloading = true;
                       });
                       if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          isloading = true;
+                        });
                         try {
                           final auth = FirebaseAuth.instance;
 
@@ -203,7 +239,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               await auth.createUserWithEmailAndPassword(
                                   email: userregistController.text,
                                   password: passwordregistController.text);
-                          print(newUser.user!.uid);
+                          await FirebaseAuth.instance.currentUser!
+                              .updateDisplayName(nameregistController.text);
+                          print(newUser.user!.displayName);
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
 
@@ -228,9 +266,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: isloading
                         ? const Padding(
                             padding: EdgeInsets.all(10),
-                            child:
-                                CircularProgressIndicator(color: Colors.white,
-                                ),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
                           )
                         : const Padding(
                             padding: EdgeInsets.all(10.0),

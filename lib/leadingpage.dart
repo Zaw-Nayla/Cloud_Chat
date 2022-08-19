@@ -59,7 +59,7 @@ class _FrontScreenState extends State<FrontScreen> {
                     ),
                     child: const Padding(
                         padding: EdgeInsets.all(10.0),
-                        child: Text('Get Started  > ',
+                        child: Text('Get Started ',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,

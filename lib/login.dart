@@ -50,6 +50,25 @@ class _MyLogInPageState extends State<MyLogInPage> {
                     image: DecorationImage(
                         image: AssetImage('images/Removal-243.png'))),
               ),
+              Container(
+                  width: 300,
+                  padding: const EdgeInsets.only(bottom: 8),
+                  alignment: Alignment.topLeft,
+                  child: const Text('Welcome!',
+                  style: TextStyle(
+                    fontFamily: 'Libre',
+                    fontSize: 20,
+                    color: Colors.teal
+                  ),)),
+              Container(
+                height: 20,
+                width: 300,
+                alignment: Alignment.topLeft,
+                child: const Text(' pls enter your account.',
+                style: TextStyle(
+                  fontFamily: 'Libre',
+                  fontSize: 13
+                ),)),
               Column(
                 children: [
                   SizedBox(
@@ -148,22 +167,24 @@ class _MyLogInPageState extends State<MyLogInPage> {
                         final String? username = prefs.getString('UserID');
                         setState(() {
                           submitted = true;
-                          isloading = true;
                           print('$username');
                         });
                         if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            isloading = true;
+                          });
                           try {
                             final auth = FirebaseAuth.instance;
                             UserCredential currentUser =
                                 await auth.signInWithEmailAndPassword(
                                     email: usernamecontroller.text,
                                     password: passwordcontroller.text);
-                            print(currentUser.user!.uid);
+                            print(currentUser.user!.displayName);
                             if (currentUser.user!.uid != null) {
                               isloading = false;
                               // ignore: use_build_context_synchronously
                               Navigator.popUntil(
-                                      context, ModalRoute.withName('/'));
+                                  context, ModalRoute.withName('/'));
                               // ignore: use_build_context_synchronously
                               Navigator.pushReplacementNamed(context, '/main');
                               usernamecontroller.clear();
